@@ -1,75 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Image Converter</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background-color: #1E1E2F;
-      color: #EAEAEA;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Compressor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #1E1E2F;
+            color: #EAEAEA;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #2B2D42;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
+        }
+
+        input, select, button {
+            margin: 10px 0;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            background: #FFD700;
+            color: #1E1E2F;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #E6C200;
+        }
+
+        img {
+            margin-top: 10px;
+            max-width: 100%;
+            border-radius: 5px;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen px-4">
-  <div class="bg-[#2B2D42] p-8 rounded-lg shadow-lg w-full max-w-md">
-    <h1 class="text-3xl font-bold text-[#FFD700] mb-6 text-center">Image Converter</h1>
-    
-    <input type="file" id="imageInput" accept="image/*" class="mb-4 w-full text-sm text-gray-300"/>
-    
-    <label for="formatSelect" class="block mb-2 text-sm">Select Format</label>
-    <select id="formatSelect" class="mb-4 w-full p-2 rounded bg-[#3A3D5B] text-white">
-      <option value="image/jpeg">JPG</option>
-      <option value="image/png">PNG</option>
-      <option value="image/webp">WEBP</option>
-    </select>
+<body>
+    <div class="container">
+        <h2>Image Compressor</h2>
+        <input type="file" id="imageInput" accept="image/*">
+        <label for="quality">Select Quality:</label>
+        <select id="quality">
+            <option value="0.8">High</option>
+            <option value="0.5">Medium</option>
+            <option value="0.2">Low</option>
+        </select>
+        <button onclick="compressImage()">Compress</button>
+        <p id="status" class="hidden">Compressing image...</p>
+        <img id="preview" class="hidden">
+        <a id="download" class="hidden" download="compressed-image.jpg">
+            <button>Download</button>
+        </a>
+    </div>
 
-    <button id="convertBtn" class="w-full py-2 px-4 bg-[#FFD700] text-[#1E1E2F] font-bold rounded hover:bg-[#E6C200] transition">
-      Convert Image
-    </button>
+    <script>
+        function compressImage() {
+            const fileInput = document.getElementById('imageInput');
+            const quality = parseFloat(document.getElementById('quality').value);
+            const status = document.getElementById('status');
+            const preview = document.getElementById('preview');
+            const download = document.getElementById('download');
 
-    <a id="downloadLink" class="hidden mt-4 block text-center text-[#FFD700] underline">Download Converted Image</a>
-  </div>
+            if (fileInput.files.length === 0) {
+                alert('Please upload an image first.');
+                return;
+            }
 
-  <script>
-    const API_KEY = "AIzaSyAq5327boHGEIq9Kh9SM0hX_iNnTx0RM2E"; // For potential use in cloud request
-
-    document.getElementById("convertBtn").addEventListener("click", async () => {
-      const input = document.getElementById("imageInput");
-      const format = document.getElementById("formatSelect").value;
-
-      if (!input.files.length) {
-        alert("Please select an image.");
-        return;
-      }
-
-      const file = input.files[0];
-      const reader = new FileReader();
-
-      reader.onload = function (e) {
-        const img = new Image();
-        img.src = e.target.result;
-
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
-
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
-
-          const dataURL = canvas.toDataURL(format);
-          const link = document.getElementById("downloadLink");
-          link.href = dataURL;
-          link.download = `converted-image.${format.split("/")[1]}`;
-          link.classList.remove("hidden");
-          link.textContent = "Download Converted Image";
-        };
-      };
-
-      reader.readAsDataURL(file);
-    });
-  </script>
+            const file = fileInput.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const ctx = canvas.getContext('2d');
+                    
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    ctx.drawImage(img, 0, 0);
+                    
+                    status.classList.remove('hidden');
+                    setTimeout(() => {
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                        preview.src = compressedDataUrl;
+                        preview.classList.remove('hidden');
+                        
+                        download.href = compressedDataUrl;
+                        download.classList.remove('hidden');
+                        status.classList.add('hidden');
+                    }, 1000);
+                };
+            };
+            
+            reader.readAsDataURL(file);
+        }
+    </script>
 </body>
 </html>
+
+  
