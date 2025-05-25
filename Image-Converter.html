@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Converter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #1E1E2F;
+      color: #EAEAEA;
+    }
+  </style>
+</head>
+<body class="flex flex-col items-center justify-center min-h-screen px-4">
+  <div class="bg-[#2B2D42] p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-3xl font-bold text-[#FFD700] mb-6 text-center">Image Converter</h1>
+    
+    <input type="file" id="imageInput" accept="image/*" class="mb-4 w-full text-sm text-gray-300"/>
+    
+    <label for="formatSelect" class="block mb-2 text-sm">Select Format</label>
+    <select id="formatSelect" class="mb-4 w-full p-2 rounded bg-[#3A3D5B] text-white">
+      <option value="image/jpeg">JPG</option>
+      <option value="image/png">PNG</option>
+      <option value="image/webp">WEBP</option>
+    </select>
+
+    <button id="convertBtn" class="w-full py-2 px-4 bg-[#FFD700] text-[#1E1E2F] font-bold rounded hover:bg-[#E6C200] transition">
+      Convert Image
+    </button>
+
+    <a id="downloadLink" class="hidden mt-4 block text-center text-[#FFD700] underline">Download Converted Image</a>
+  </div>
+
+  <script>
+    const API_KEY = "AIzaSyAq5327boHGEIq9Kh9SM0hX_iNnTx0RM2E"; // For potential use in cloud request
+
+    document.getElementById("convertBtn").addEventListener("click", async () => {
+      const input = document.getElementById("imageInput");
+      const format = document.getElementById("formatSelect").value;
+
+      if (!input.files.length) {
+        alert("Please select an image.");
+        return;
+      }
+
+      const file = input.files[0];
+      const reader = new FileReader();
+
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
+
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+
+          const dataURL = canvas.toDataURL(format);
+          const link = document.getElementById("downloadLink");
+          link.href = dataURL;
+          link.download = `converted-image.${format.split("/")[1]}`;
+          link.classList.remove("hidden");
+          link.textContent = "Download Converted Image";
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
