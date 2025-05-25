@@ -1,75 +1,220 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Image Converter</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    body {
-      background-color: #1E1E2F;
-      color: #EAEAEA;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi Tool Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-dark-navy: #1E1E2F;
+            --text-light-gray: #EAEAEA;
+            --header-deep-blue: #2B2D42;
+            --accent-gold: #FFD700;
+            --tool-card-bg: #3A3D5B;
+            --hover-gold: #E6C200;
+            --hover-text: #1E1E2F;
+        }
+        
+        body {
+            background-color: var(--bg-dark-navy);
+            color: var(--text-light-gray);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background-color: var(--header-deep-blue);
+            box-shadow: 0 4px 6px rgba(255, 215, 0, 0.2);
+        }
+        
+        .tool-card {
+            background-color: var(--tool-card-bg);
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(255, 215, 0, 0.2);
+        }
+        
+        .tool-card:hover {
+            background-color: var(--accent-gold);
+            color: var(--hover-text);
+            transform: translateY(-5px);
+        }
+        
+        .tool-card:hover .tool-icon {
+            color: var(--hover-text);
+        }
+        
+        .tool-btn {
+            background-color: var(--accent-gold);
+            color: var(--bg-dark-navy);
+            transition: all 0.3s ease;
+        }
+        
+        .tool-btn:hover {
+            background-color: var(--hover-gold);
+            transform: scale(1.05);
+        }
+        
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
 </head>
-<body class="flex flex-col items-center justify-center min-h-screen px-4">
-  <div class="bg-[#2B2D42] p-8 rounded-lg shadow-lg w-full max-w-md">
-    <h1 class="text-3xl font-bold text-[#FFD700] mb-6 text-center">Image Converter</h1>
-    
-    <input type="file" id="imageInput" accept="image/*" class="mb-4 w-full text-sm text-gray-300"/>
-    
-    <label for="formatSelect" class="block mb-2 text-sm">Select Format</label>
-    <select id="formatSelect" class="mb-4 w-full p-2 rounded bg-[#3A3D5B] text-white">
-      <option value="image/jpeg">JPG</option>
-      <option value="image/png">PNG</option>
-      <option value="image/webp">WEBP</option>
-    </select>
+<body class="min-h-screen flex flex-col">
+    <!-- Header Section -->
+    <header class="header py-6 px-4 text-center">
+        <div class="container mx-auto">
+            <h1 class="text-4xl md:text-5xl font-bold mb-2 text-[#FFD700]">Multi Tool Hub</h1>
+            <p class="text-lg md:text-xl opacity-90">Your one-stop solution for all digital tools</p>
+        </div>
+    </header>
 
-    <button id="convertBtn" class="w-full py-2 px-4 bg-[#FFD700] text-[#1E1E2F] font-bold rounded hover:bg-[#E6C200] transition">
-      Convert Image
-    </button>
+    <!-- Main Content -->
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <div class="tools-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+            <!-- Tool Card 1: Image Converter -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-exchange-alt text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Image Converter</h2>
+                </div>
+                <p class="mb-4 flex-grow">Convert between JPG, PNG, WEBP, and other image formats with ease. Preserve quality while changing formats.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Image Converter')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-    <a id="downloadLink" class="hidden mt-4 block text-center text-[#FFD700] underline">Download Converted Image</a>
-  </div>
+            <!-- Tool Card 2: Image Compressor -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-compress-alt text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Image Compressor</h2>
+                </div>
+                <p class="mb-4 flex-grow">Reduce image file sizes without noticeable quality loss. Perfect for web optimization and faster loading.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Image Compressor')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-  <script>
-    const API_KEY = "AIzaSyAq5327boHGEIq9Kh9SM0hX_iNnTx0RM2E"; // For potential use in cloud request
+            <!-- Tool Card 3: Image Crop -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-crop text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Image Crop</h2>
+                </div>
+                <p class="mb-4 flex-grow">Precisely crop your images to any dimension or aspect ratio. Perfect for social media profiles and thumbnails.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Image Crop')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-    document.getElementById("convertBtn").addEventListener("click", async () => {
-      const input = document.getElementById("imageInput");
-      const format = document.getElementById("formatSelect").value;
+            <!-- Tool Card 4: Video Converter -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-video text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Video Converter</h2>
+                </div>
+                <p class="mb-4 flex-grow">Convert videos between MP4, MOV, AVI, and other formats. Adjust resolution and compression settings.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Video Converter')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-      if (!input.files.length) {
-        alert("Please select an image.");
-        return;
-      }
+            <!-- Tool Card 5: Age Calculator -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-birthday-cake text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Age Calculator</h2>
+                </div>
+                <p class="mb-4 flex-grow">Calculate exact age in years, months, and days. Useful for applications, forms, or just curiosity.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Age Calculator')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-      const file = input.files[0];
-      const reader = new FileReader();
+            <!-- Tool Card 6: EMI Calculator -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-calculator text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">EMI Calculator</h2>
+                </div>
+                <p class="mb-4 flex-grow">Calculate Equated Monthly Installments for loans. Adjust principal, interest rate, and tenure.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('EMI Calculator')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-      reader.onload = function (e) {
-        const img = new Image();
-        img.src = e.target.result;
+            <!-- Tool Card 7: SIP Calculator -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-chart-line text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">SIP Calculator</h2>
+                </div>
+                <p class="mb-4 flex-grow">Calculate returns on Systematic Investment Plans. Plan your investments with projected growth.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('SIP Calculator')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
 
-        img.onload = function () {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.width;
-          canvas.height = img.height;
+            <!-- Tool Card 8: Audio Trim -->
+            <div class="tool-card rounded-lg p-6 flex flex-col">
+                <div class="flex items-center mb-4">
+                    <i class="tool-icon fas fa-music text-2xl mr-3 text-[#FFD700]"></i>
+                    <h2 class="text-xl font-semibold">Audio Trim</h2>
+                </div>
+                <p class="mb-4 flex-grow">Trim audio files to create perfect clips. Cut, fade, and adjust volume for ringtones or samples.</p>
+                <button class="tool-btn py-2 px-4 rounded-md font-bold self-start" onclick="redirectToTool('Audio Trim')">
+                    Use Tool <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+            </div>
+        </div>
+    </main>
 
-          const ctx = canvas.getContext("2d");
-          ctx.drawImage(img, 0, 0);
+    <!-- Footer -->
+    <footer class="bg-[#2B2D42] py-6 px-4 text-center">
+        <div class="container mx-auto">
+            <p class="mb-2">© 2023 Multi Tool Hub. All rights reserved.</p>
+            <div class="flex justify-center space-x-4">
+                <a href="#" class="text-[#FFD700] hover:text-[#E6C200]"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="text-[#FFD700] hover:text-[#E6C200]"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="text-[#FFD700] hover:text-[#E6C200]"><i class="fab fa-instagram"></i></a>
+                <a href="#" class="text-[#FFD700] hover:text-[#E6C200]"><i class="fab fa-github"></i></a>
+            </div>
+        </div>
+    </footer>
 
-          const dataURL = canvas.toDataURL(format);
-          const link = document.getElementById("downloadLink");
-          link.href = dataURL;
-          link.download = `converted-image.${format.split("/")[1]}`;
-          link.classList.remove("hidden");
-          link.textContent = "Download Converted Image";
-        };
-      };
-
-      reader.readAsDataURL(file);
-    });
-  </script>
+    <script>
+        function redirectToTool(toolName) {
+            alert(`Redirecting to ${toolName}`);
+            // In a real implementation, this would navigate to the tool page
+            // window.location.href = `/tools/${toolName.toLowerCase().replace(' ', '-')}`;
+        }
+        
+        // Add animation on scroll
+        document.addEventListener('DOMContentLoaded', () => {
+            const toolCards = document.querySelectorAll('.tool-card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+            
+            toolCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
