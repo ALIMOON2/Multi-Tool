@@ -1,140 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi Tool Hub</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
-
-        body {
-            background: #1E1E2F;
-            color: #EAEAEA;
-            text-align: center;
-        }
-
-        .header {
-            background: #2B2D42;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-            color: #FFD700;
-        }
-
-        .container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            max-width: 900px;
-            margin: 40px auto;
-        }
-
-        .tool-card {
-            background: #3A3D5B;
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            transition: 0.3s;
-            box-shadow: 0 4px 8px rgba(255, 215, 0, 0.2);
-        }
-
-        .tool-card:hover {
-            background: #FFD700;
-            color: #1E1E2F;
-        }
-
-        .tool-card h2 {
-            margin-bottom: 10px;
-        }
-
-        .btn {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 10px 20px;
-            background: #FFD700;
-            color: #1E1E2F;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .btn:hover {
-            background: #E6C200;
-        }
-
-        @media (max-width: 768px) {
-            .container {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Image Converter</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-color: #1E1E2F;
+      color: #EAEAEA;
+    }
+  </style>
 </head>
-<body>
-    <div class="header">Multi Tool Hub</div>
+<body class="flex flex-col items-center justify-center min-h-screen px-4">
+  <div class="bg-[#2B2D42] p-8 rounded-lg shadow-lg w-full max-w-md">
+    <h1 class="text-3xl font-bold text-[#FFD700] mb-6 text-center">Image Converter</h1>
     
-    <div class="container">
-        <div class="tool-card">
-            <h2>Image Converter</h2>
-            <p>Convert images to different formats easily.</p>
-            <button class="btn" onclick="goToSection('Image-Converter.html')">Go to Tool</button>
-        </div>
+    <input type="file" id="imageInput" accept="image/*" class="mb-4 w-full text-sm text-gray-300"/>
+    
+    <label for="formatSelect" class="block mb-2 text-sm">Select Format</label>
+    <select id="formatSelect" class="mb-4 w-full p-2 rounded bg-[#3A3D5B] text-white">
+      <option value="image/jpeg">JPG</option>
+      <option value="image/png">PNG</option>
+      <option value="image/webp">WEBP</option>
+    </select>
 
-        <div class="tool-card">
-            <h2>Image Compressor</h2>
-            <p>Compress images without losing quality.</p>
-            <button class="btn" onclick="goToSection('image-compressor')">Go to Tool</button>
-        </div>
+    <button id="convertBtn" class="w-full py-2 px-4 bg-[#FFD700] text-[#1E1E2F] font-bold rounded hover:bg-[#E6C200] transition">
+      Convert Image
+    </button>
 
-        <div class="tool-card">
-            <h2>Image Crop</h2>
-            <p>Crop images to the desired size and dimensions.</p>
-            <button class="btn" onclick="goToSection('image-crop')">Go to Tool</button>
-        </div>
+    <a id="downloadLink" class="hidden mt-4 block text-center text-[#FFD700] underline">Download Converted Image</a>
+  </div>
 
-        <div class="tool-card">
-            <h2>Video Converter</h2>
-            <p>Convert videos to different formats quickly.</p>
-            <button class="btn" onclick="goToSection('video-converter')">Go to Tool</button>
-        </div>
+  <script>
+    const API_KEY = "AIzaSyAq5327boHGEIq9Kh9SM0hX_iNnTx0RM2E"; // For potential use in cloud request
 
-        <div class="tool-card">
-            <h2>Age Calculator</h2>
-            <p>Find your exact age in years, months, and days.</p>
-            <button class="btn" onclick="goToSection('age-calculator')">Go to Tool</button>
-        </div>
+    document.getElementById("convertBtn").addEventListener("click", async () => {
+      const input = document.getElementById("imageInput");
+      const format = document.getElementById("formatSelect").value;
 
-        <div class="tool-card">
-            <h2>EMI Calculator</h2>
-            <p>Calculate your loan EMIs quickly.</p>
-            <button class="btn" onclick="goToSection('emi-calculator')">Go to Tool</button>
-        </div>
+      if (!input.files.length) {
+        alert("Please select an image.");
+        return;
+      }
 
-        <div class="tool-card">
-            <h2>SIP Calculator</h2>
-            <p>Calculate your SIP returns effortlessly.</p>
-            <button class="btn" onclick="goToSection('sip-calculator')">Go to Tool</button>
-        </div>
+      const file = input.files[0];
+      const reader = new FileReader();
 
-        <div class="tool-card">
-            <h2>Audio Trim</h2>
-            <p>Trim audio files to your required length.</p>
-            <button class="btn" onclick="goToSection('audio-trim')">Go to Tool</button>
-        </div>
-    </div>
+      reader.onload = function (e) {
+        const img = new Image();
+        img.src = e.target.result;
 
-    <script>
-        function goToSection(sectionId) {
-            alert('Redirecting to ' + sectionId + ' (Page under development)');
-            // Replace with actual navigation logic when the pages are ready
-        }
-    </script>
+        img.onload = function () {
+          const canvas = document.createElement("canvas");
+          canvas.width = img.width;
+          canvas.height = img.height;
+
+          const ctx = canvas.getContext("2d");
+          ctx.drawImage(img, 0, 0);
+
+          const dataURL = canvas.toDataURL(format);
+          const link = document.getElementById("downloadLink");
+          link.href = dataURL;
+          link.download = `converted-image.${format.split("/")[1]}`;
+          link.classList.remove("hidden");
+          link.textContent = "Download Converted Image";
+        };
+      };
+
+      reader.readAsDataURL(file);
+    });
+  </script>
 </body>
 </html>
-
-  
